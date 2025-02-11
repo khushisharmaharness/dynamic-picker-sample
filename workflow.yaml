@@ -1,11 +1,11 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: updatedfetchLocal
-  title: Update updated fetch Local
+  name: updatedfetch 
+  title: Update updated fetch
   description: A template to test GitSync variables
 spec:
-  owner: khushi.sharma@harness.io
+  owner: deepesh.kumar@harness.io
   type: service
   parameters:
     - title: Fill in some steps
@@ -15,8 +15,14 @@ spec:
           description: Harness Project Identifier
           type: string
           default: deepesh-ui
-    - title: Pick one of the GitHub Repos
-      properties:
+        customOne:
+          title: GitHub Repos getter
+          type: string
+          description: Pick one of GitHub Repos
+          ui:field: SelectFieldFromApi
+          ui:options:
+            path: proxy/github-api/users/{{parameters.gitusername.split('/')[0]}}/repos
+            valueSelector: full_name
         custom:
           title: GitHub Repos
           type: string
@@ -25,12 +31,13 @@ spec:
           ui:options:
             path: proxy/github-api/users/{{parameters.gitusername}}/repos
             valueSelector: full_name
-            setContextData: 
+            contextData: 
               reponame: name
               branch: default_branch
               type: visibility                 
         repositoryname:
           title: Repo Name
+          readonly: true
           description: Harness Project Identifier
           type: string            
           ui:field: ContextViewer
@@ -38,6 +45,7 @@ spec:
             getContextData: {{formContext.reponame}}
         branchName:
           title: Default Branch
+          readonly: true
           description: Harness Project Identifier
           type: string
           ui:field: ContextViewer
@@ -45,19 +53,12 @@ spec:
             getContextData: {{formContext.branch}}          
         typeName:
           title: Visibility
+          readonly: true
           description: Harness Project Identifier
           type: string     
           ui:field: ContextViewer
           ui:options:
-            getContextData: {{formContext.type}}   
-    - title: Fill in some steps
-      properties:            
-        gitusername:
-          title: Github username
-          description: Harness Project Identifier
-          type: string
-          value: {{parameters.repositoryname}}
-          default: deepesh-ui      
+            getContextData: {{formContext.type}}          
         userdata:
           title: user detail
           type: string
@@ -65,7 +66,7 @@ spec:
           ui:field: ValidateAndFetch
           ui:options:
             path: proxy/github-api/users/{{parameters.gitusername}}
-            setContextData: 
+            contextData: 
               loginName: login
               plan: plan.name
               publicRepos: public_repos
