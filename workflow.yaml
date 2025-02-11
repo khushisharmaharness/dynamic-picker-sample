@@ -16,6 +16,7 @@ spec:
           type: string
           default: deepesh-ui
     - title: Pick one of the GitHub Repos
+      properties:
         custom:
           title: GitHub Repos
           type: string
