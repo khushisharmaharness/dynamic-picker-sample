@@ -15,6 +15,7 @@ spec:
           description: Harness Project Identifier
           type: string
           default: deepesh-ui
+    - title: Pick one of the GitHub Repos
         custom:
           title: GitHub Repos
           type: string
